@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>dotTasker</id>
+    <version>1.0.0</version>
+    <title>Tasker</title>
+    <authors>Guilherme Martin</authors>
+    <owners>Guilherme Martin</owners>
+    <description>Aplicação para agendamento de tasks</description>
+  </metadata>
+  <files>
+    <file src="/Users/guilherme.martin/Documents/Projetos Guilherme/Tasker/src/Tasker/Tasker.Core/bin/Debug/net7.0/Tasker.Core.dll" target="lib/net7.0/Tasker.Core.dll" />
+    <file src="/Users/guilherme.martin/Documents/Projetos Guilherme/Tasker/src/Tasker/Tasker.Dashboard/bin/Debug/net7.0/Tasker.Dashboard.dll" target="lib/net7.0/Tasker.Dashboard.dll" />
+    <file src="/Users/guilherme.martin/Documents/Projetos Guilherme/Tasker/src/Tasker/Tasker.Logging/bin/Debug/net7.0/Tasker.Logging.dll" target="lib/net7.0/Tasker.Logging.dll" />
+    <file src="/Users/guilherme.martin/Documents/Projetos Guilherme/Tasker/src/Tasker/Tasker.Repository/bin/Debug/net7.0/Tasker.Repository.dll" target="lib/net7.0/Tasker.Repository.dll" />
+  </files>
+</package>
