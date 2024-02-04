@@ -19,10 +19,10 @@ jobs:
         dotnet-version: '8.0'
 
     - name: Restore dependencies
-      run: dotnet restore **/*.sln
+      run: dotnet restore nuget/Tasker.sln
 
     - name: Build
-      run: dotnet build **/*.sln --configuration Release
+      run: dotnet build nuget/Tasker.sln --configuration Release
           
     - name: Get latest NuGet package version
       run: |
@@ -55,13 +55,13 @@ jobs:
 
     - name: Update Nuspec file
       run: |
-        nuspec_path="**/*.nuspec"
+        nuspec_path="nuget/Tasker.nuspec"
         sed -i "s/<version>.*<\/version>/<version>${NEW_VERSION}<\/version>/" "$nuspec_path"
         cat "$nuspec_path"
 
     - name: Pack NuGet package
       run: |
-        nuspec_path="**/*.nuspec"
+        nuspec_path="nuget/Tasker.nuspec"
         dotnet pack -p:NuspecFile="$nuspec_path" -p:PackageVersion="${NEW_VERSION}"
       
   publish:
@@ -78,6 +78,6 @@ jobs:
         dotnet-version: '8.0'
 
     - name: Push NuGet Package
-      run: dotnet nuget push **/*.nupkg --source https://www.nuget.org/api/v3/package --api-key ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push nuget/Tasker.nupkg --source https://www.nuget.org/api/v3/package --api-key ${{ secrets.NUGET_API_KEY }}
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
