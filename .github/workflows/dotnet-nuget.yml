@@ -26,7 +26,12 @@ jobs:
 
     - name: Get latest NuGet package version
       run: |
-        latest_version=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json" | jq -r '.versions | map(select(.version != null)) | max_by(.version) | .version')
+        nuget_response=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json")
+        if [[ $nuget_response == *version* ]]; then
+          latest_version=$(echo "$nuget_response" | jq -r '.')
+        else
+          latest_version=$(echo "$nuget_response" | jq -r '.versions | map(select(.version != null)) | max_by(.version) | .version')
+        fi
         new_version=$(dotnet nuget increment "$latest_version")
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
