@@ -31,8 +31,11 @@ jobs:
         echo "NuGet API Response:"
         echo "$nuget_response"
     
-        # Parse JSON com jq
-        latest_version=$(echo "$nuget_response" | jq -r '.versions | max_by(.)')
+        # Parse JSON com sort
+        latest_version=$(echo "$nuget_response" | jq -r '.versions | sort -V | tail -n1')
+    
+        echo "Latest version after sorting:"
+        echo "$latest_version"
     
         if [ "$latest_version" = "null" ]; then
           echo "Error: Unable to determine the latest version from the NuGet API response."
