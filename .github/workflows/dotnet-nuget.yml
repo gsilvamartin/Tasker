@@ -31,8 +31,8 @@ jobs:
         echo "NuGet API Response:"
         echo "$nuget_response"
     
-        # Parse JSON com Python
-        latest_version=$(echo "$nuget_response" | python3 -c "import sys, json; data = json.load(sys.stdin); versions = data.get('versions', []); versions = [v for v in versions if v is not None]; print(max(versions, key=lambda s: list(map(int, s.split('.')))) if versions else ''")
+        # Parse JSON with Python
+        latest_version=$(echo "$nuget_response" | python -c "import sys, json; data = json.load(sys.stdin); versions = data.get('versions', []); versions = [v for v in versions if v is not None]; print(max(versions, key=lambda s: list(map(int, s.split('.')))) if versions else '')")
     
         echo "Latest version after parsing:"
         echo "$latest_version"
@@ -46,8 +46,6 @@ jobs:
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
-
-
 
     - name: Show environment variable
       run: |
