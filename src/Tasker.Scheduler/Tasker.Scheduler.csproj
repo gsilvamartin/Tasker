@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-Tasker.Scheduler-E6C4425B-63E8-4FAB-95EB-14C10E5F01BD</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
+        <PackageReference Include="NCrontab" Version="3.3.3" />
+        <PackageReference Include="NetMQ" Version="4.0.1.13" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tasker.Repository\Tasker.Repository.csproj" />
+    </ItemGroup>
+</Project>
