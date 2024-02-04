@@ -29,9 +29,12 @@ jobs:
         latest_version=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json" | jq -r '.versions[-1]')
         new_version=$(dotnet nuget increment "$latest_version")
         nuspec_path="/nuget/Tasker.nuspec"
-        sed -i "s/<version>.*<\/version>/<version>$new_version<\/version>/" $nuspec_path
-        dotnet pack -p:NuspecFile=$nuspec_path -p:PackageVersion=$new_version
-
+        sed -i "s/<version>.*<\/version>/<version>$new_version<\/version>/" "$nuspec_path"
+        cat "$nuspec_path"
+        dotnet pack -p:NuspecFile="$nuspec_path" -p:PackageVersion="$new_version"
+        shell: /usr/bin/bash -e {0}
+          env:
+            DOTNET_ROOT: /home/runner/.dotnet
       
   publish:
     needs: build
