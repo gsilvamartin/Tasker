@@ -29,7 +29,7 @@ jobs:
         latest_version=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json" | jq -r '.versions[-1]')
         new_version=$(dotnet nuget increment "$latest_version")
         sed -i "s/<version>.*<\/version>/<version>$new_version<\/version>/" /nuget/Tasker.nuspec
-        dotnet pack --no-build --configuration Release -p:NuspecFile=/nuget/Tasker.nuspec -p:PackageVersion=$new_version
+        dotnet pack --configuration Release -p:NuspecFile=/nuget/Tasker.nuspec -p:PackageVersion=$new_version
       
   publish:
     needs: build
