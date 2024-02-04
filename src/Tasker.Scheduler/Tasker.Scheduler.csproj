@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <UserSecretsId>dotnet-Tasker.Scheduler-E6C4425B-63E8-4FAB-95EB-14C10E5F01BD</UserSecretsId>
+        <IsPackable>true</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
