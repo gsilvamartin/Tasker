@@ -24,14 +24,24 @@ jobs:
     - name: Build
       run: dotnet build **/*.sln --configuration Release
 
-    - name: Pack NuGet
+    - name: Get latest NuGet package version
       run: |
         latest_version=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json" | jq -r '.versions[-1]')
         new_version=$(dotnet nuget increment "$latest_version")
+        echo "Latest version: $latest_version"
+        echo "New version: $new_version"
+        echo "::set-env name=NEW_VERSION::$new_version"
+
+    - name: Update Nuspec file
+      run: |
         nuspec_path="/nuget/Tasker.nuspec"
-        sed -i "s/<version>.*<\/version>/<version>$new_version<\/version>/" "$nuspec_path"
+        sed -i "s/<version>.*<\/version>/<version>${{ env.NEW_VERSION }}<\/version>/" "$nuspec_path"
         cat "$nuspec_path"
-        dotnet pack -p:NuspecFile="$nuspec_path" -p:PackageVersion="$new_version"
+
+    - name: Pack NuGet package
+      run: |
+        nuspec_path="/nuget/Tasker.nuspec"
+        dotnet pack -p:NuspecFile="$nuspec_path" -p:PackageVersion="${{ env.NEW_VERSION }}"
       
   publish:
     needs: build
