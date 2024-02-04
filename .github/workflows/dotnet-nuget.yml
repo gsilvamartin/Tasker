@@ -19,10 +19,10 @@ jobs:
         dotnet-version: '8.0'
 
     - name: Restore dependencies
-      run: dotnet restore nuget/Tasker.sln
+      run: dotnet restore **/*.sln
 
     - name: Build
-      run: dotnet build nuget/Tasker.sln --configuration Release
+      run: dotnet build **/*.sln --configuration Release
           
     - name: Get latest NuGet package version
       run: |
