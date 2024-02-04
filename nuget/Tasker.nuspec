@@ -21,12 +21,4 @@
       <dependency id="NCrontab" version="3.3.3" />
     </dependencies>
   </metadata>
-  <files>
-    <file src="home/runner/work/Tasker/Tasker/src/Tasker.Repository/bin/Debug/net8.0/Tasker.Repository.dll" target="lib/net8.0/Tasker.Repository.dll" />
-    <file src="home/runner/work/Tasker/Tasker/src/Tasker.API/bin/Debug/net8.0/Tasker.API.dll" target="lib/net8.0/Tasker.API.dll" />
-    <file src="home/runner/work/Tasker/Tasker/src/Tasker.Executor/bin/Debug/net8.0/Tasker.Executor.dll" target="lib/net8.0/Tasker.Executor.dll" />
-    <file src="home/runner/work/Tasker/Tasker/src/Tasker.Scheduler/bin/Debug/net8.0/Tasker.Scheduler.dll" target="lib/net8.0/Tasker.Scheduler.dll" />
-    <file src="home/runner/work/Tasker/Tasker/src/Tasker.Core/bin/Debug/net8.0/Tasker.Core.dll" target="lib/net8.0/Tasker.Core.dll" />
-    <file src="home/runner/work/Tasker/Tasker/src/Tasker.Logging/bin/Debug/net8.0/Tasker.Logging.dll" target="lib/net8.0/Tasker.Logging.dll" />
-  </files>
 </package>
