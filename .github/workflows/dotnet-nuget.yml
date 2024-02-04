@@ -56,7 +56,7 @@ jobs:
     - name: Pack NuGet package
       run: |
         nuspec_path="nuget/Tasker.nuspec"
-        dotnet pack **/*.sln --configuration Release -p:NuspecFile="$nuspec_path" -p:PackageVersion="${NEW_VERSION}" -o ./nuget
+        dotnet pack **/*.sln --configuration Release -p:NuspecFile="$nuspec_path" -p:PackageVersion="${new_version}" -p:PackageOutputPath=./nuget
 
   publish:
     needs: build
