@@ -27,22 +27,24 @@ jobs:
     - name: Get latest NuGet package version
       run: |
         nuget_response=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json")
-        
+    
         echo "NuGet API Response:"
         echo "$nuget_response"
     
         # Parse JSON sem jq
-        latest_version=$(echo "$nuget_response" | grep -oP '"versions":\s*\[\s*"[^"]+' | cut -d'"' -f4 | sort -V | tail -n1)
-        
+        versions=$(echo "$nuget_response" | awk -F'"' '/"versions":/ {print $4}')
+        latest_version=$(echo "$versions" | tr -d '[],"' | awk '{print $1}')
+    
         if [ -z "$latest_version" ]; then
           echo "Error: Unable to determine the latest version from the NuGet API response."
           exit 1
         fi
-        
+    
         new_version=$(dotnet nuget increment "$latest_version")
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+
 
 
     - name: Show environment variable
