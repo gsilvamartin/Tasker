@@ -31,9 +31,9 @@ jobs:
         echo "NuGet API Response:"
         echo "$nuget_response"
     
-        # Parse JSON com jq
-        latest_version=$(echo "$nuget_response" | jq -r '.versions | max_by(. | select(. != null))')
-        
+        # Parse JSON com awk
+        latest_version=$(echo "$nuget_response" | awk -F'"' '/"versions":/ {gsub(/[\[",]/, "", $4); print $4}' | tr ' ' '\n' | sort -V | tail -n1)
+    
         if [ -z "$latest_version" ]; then
           echo "Error: Unable to determine the latest version from the NuGet API response."
           exit 1
@@ -43,6 +43,7 @@ jobs:
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+
 
 
     - name: Show environment variable
