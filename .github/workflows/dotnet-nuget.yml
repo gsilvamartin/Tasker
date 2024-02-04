@@ -34,12 +34,12 @@ jobs:
         latest_version=""
         
         # Parse JSON without jq
-        if [[ $nuget_response == *"version"* ]]; then
+        if [[ $nuget_response == *'"version":'* ]]; then
           # Handle the case when the response is a single version string
           latest_version=$(echo "$nuget_response" | grep -oP '"version":\s*"\K[^"]+' | head -n1)
-        elif [[ $nuget_response == *"[{"* ]]; then
+        elif [[ $nuget_response == *'"versions":'*'['* ]]; then
           # Handle the case when the response is an array of versions
-          latest_version=$(echo "$nuget_response" | grep -oP '"version":\s*"\K[^"]+' | sort -V | tail -n1)
+          latest_version=$(echo "$nuget_response" | grep -oP '"versions":\s*\[\K[^]]+' | tr -d '",' | sort -V | tail -n1)
         fi
         
         if [ -z "$latest_version" ]; then
@@ -51,6 +51,7 @@ jobs:
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+
 
     - name: Show environment variable
       run: |
