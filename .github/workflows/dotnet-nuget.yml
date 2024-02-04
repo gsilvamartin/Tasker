@@ -26,6 +26,9 @@ jobs:
       
     - name: Get latest NuGet package version
       run: |
+        sudo apt-get update
+        sudo apt-get install jq
+    
         nuget_response=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json")
         
         echo "NuGet API Response:"
@@ -50,6 +53,7 @@ jobs:
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
+
 
     - name: Show environment variable
       run: |
