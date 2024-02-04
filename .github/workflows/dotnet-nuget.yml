@@ -26,9 +26,6 @@ jobs:
       
     - name: Get latest NuGet package version
       run: |
-        sudo apt-get update
-        sudo apt-get install jq
-    
         nuget_response=$(curl -s "https://api.nuget.org/v3-flatcontainer/dotTasker/index.json")
         
         echo "NuGet API Response:"
@@ -36,12 +33,13 @@ jobs:
     
         latest_version=""
         
-        if [ -n "$(echo "$nuget_response" | jq -r '.version')" ]; then
+        # Parse JSON without jq
+        if [[ $nuget_response == *"version"* ]]; then
           # Handle the case when the response is a single version string
-          latest_version=$(echo "$nuget_response" | jq -r '.version')
-        elif [ -n "$(echo "$nuget_response" | jq -r '.versions | .[0].version')" ]; then
+          latest_version=$(echo "$nuget_response" | grep -oP '"version":\s*"\K[^"]+' | head -n1)
+        elif [[ $nuget_response == *"[{"* ]]; then
           # Handle the case when the response is an array of versions
-          latest_version=$(echo "$nuget_response" | jq -r '.versions | map(select(.version != null)) | max_by(.version) | .version')
+          latest_version=$(echo "$nuget_response" | grep -oP '"version":\s*"\K[^"]+' | sort -V | tail -n1)
         fi
         
         if [ -z "$latest_version" ]; then
@@ -53,7 +51,6 @@ jobs:
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
         echo "NEW_VERSION=$new_version" >> $GITHUB_ENV
-
 
     - name: Show environment variable
       run: |
