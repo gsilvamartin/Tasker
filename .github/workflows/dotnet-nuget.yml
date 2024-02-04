@@ -40,13 +40,10 @@ jobs:
           echo "Error: Unable to determine the latest version from the NuGet API response."
           exit 1
         fi
-    
-        new_version=$(dotnet nuget increment --version "$latest_version")
-    
-        if [ -z "$new_version" ]; then
-          echo "Error: Unable to increment the version."
-          exit 1
-        fi
+        
+        IFS='.' read -r -a version_parts <<< "$latest_version"
+        ((version_parts[2]++))  # Increment the patch version
+        new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
     
         echo "Latest version: $latest_version"
         echo "New version: $new_version"
