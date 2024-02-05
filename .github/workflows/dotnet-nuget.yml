@@ -62,6 +62,11 @@ jobs:
       run: |
         nuspec_path="nuget/Tasker.nuspec"
         nuget pack $nuspec_path
+        echo "::set-output name=package_version::$NEW_VERSION"
+        echo "Packaged NuGet package version: $NEW_VERSION"
+
+    outputs:
+      package_version: ${{ steps.pack.outputs.package_version }}
 
   publish:
     needs: build
@@ -76,7 +81,16 @@ jobs:
       with:
         dotnet-version: '8.0'
 
+    - name: Install nuget CLI
+      run: |
+        sudo curl -o /usr/local/bin/nuget.exe https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+        alias nuget="mono /usr/local/bin/nuget.exe"
+
+    - name: Get Package Version
+      id: get_version
+      run: echo "PACKAGE_VERSION=${{ needs.build.outputs.package_version }}" >> $GITHUB_ENV
+
     - name: Push NuGet Package
-      run: dotnet nuget push nuget/Tasker.${NEW_VERSION}.nupkg --source https://www.nuget.org/api/v3/package --api-key ${{ secrets.NUGET_API_KEY }}
+      run: nuget push nuget/Tasker.${{ env.PACKAGE_VERSION }}.nupkg --source https://www.nuget.org/api/v3/package --api-key ${{ secrets.NUGET_API_KEY }}
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
