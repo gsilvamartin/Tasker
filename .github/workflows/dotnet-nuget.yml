@@ -77,6 +77,6 @@ jobs:
         dotnet-version: '8.0'
 
     - name: Push NuGet Package
-      run: dotnet nuget push nuget/Tasker.nupkg --source https://www.nuget.org/api/v3/package --api-key ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push nuget/Tasker.${NEW_VERSION}.nupkg --source https://www.nuget.org/api/v3/package --api-key ${{ secrets.NUGET_API_KEY }}
       env:
         NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
