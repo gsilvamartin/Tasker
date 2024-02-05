@@ -39,7 +39,7 @@ jobs:
           fi
 
           IFS='.' read -r -a version_parts <<< "$latest_version"
-          ((version_parts[2]++))  # Increment the patch version
+          ((version_parts[2]++))
           new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
 
           echo "Latest version: $latest_version"
