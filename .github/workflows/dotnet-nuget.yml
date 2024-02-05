@@ -70,6 +70,6 @@ jobs:
           echo "Packaged NuGet package version: $NEW_VERSION"
 
       - name: Push NuGet Package
-        run: nuget push **/*.nupkg -Source https://www.nuget.org/api/v3/package -ApiKey ${{ secrets.NUGET_API_KEY }}
+        run: nuget push **/*.nupkg -Source https://api.nuget.org/v3/index.json -ApiKey ${{ secrets.NUGET_API_KEY }}
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
