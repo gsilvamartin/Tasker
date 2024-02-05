@@ -92,6 +92,6 @@ jobs:
         run: echo "PACKAGE_VERSION=${{ needs.build.outputs.package_version }}" >> $GITHUB_ENV
 
       - name: Push NuGet Package
-        run: nuget push /home/runner/work/Tasker/Tasker/dotTasker.${{ env.PACKAGE_VERSION }}.nupkg -Source https://www.nuget.org/api/v3/package -ApiKey ${{ secrets.NUGET_API_KEY }}
+        run: nuget push nuget/dotTasker.${{ env.PACKAGE_VERSION }}.nupkg -Source https://www.nuget.org/api/v3/package -ApiKey ${{ secrets.NUGET_API_KEY }}
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
