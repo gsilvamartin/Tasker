@@ -4,5 +4,5 @@ namespace Tasker.Executor.Service.Interfaces;
 
 public interface IExecutorService
 {
-    public void ExecuteJob(string jobName);
+    public Task ExecuteJob(string jobName);
 }

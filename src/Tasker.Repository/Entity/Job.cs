@@ -29,6 +29,8 @@ public partial class Job
 
     public int? IntervalInMinutes { get; set; }
 
+    public virtual ICollection<JobHistory> JobHistories { get; set; } = new List<JobHistory>();
+
     public virtual SchedulingType SchedulingType { get; set; } = null!;
 
     public virtual Status Status { get; set; } = null!;

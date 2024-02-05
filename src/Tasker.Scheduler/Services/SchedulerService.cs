@@ -36,7 +36,7 @@ public class SchedulerService : ISchedulerService
             }
 
             job.StatusId = jobsStatusId;
-            _jobRepository.Update(job).Wait();
+            await _jobRepository.Update(job);
         }
         catch (Exception e)
         {
