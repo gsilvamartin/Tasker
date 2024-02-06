@@ -23,6 +23,8 @@ public partial class Job
 
     public DateTime? CreationDate { get; set; }
 
+    public DateTime? LastUpdate { get; set; }
+
     public DateTime? LastExecution { get; set; }
 
     public string? CronExpression { get; set; }

@@ -36,6 +36,7 @@ public class SchedulerService : ISchedulerService
             }
 
             job.StatusId = jobsStatusId;
+            job.LastUpdate = DateTime.Now;
             await _jobRepository.Update(job);
         }
         catch (Exception e)
@@ -50,10 +51,11 @@ public class SchedulerService : ISchedulerService
         {
             return (await _jobRepository.GetWhere(x =>
                 x.Status.Id == (int)JobStatus.Completed ||
-                (x.Status.Id == (int)JobStatus.Failed && x.CurrentlyRetries < x.MaximumRetries) ||
+                (x.Status.Id == (int)JobStatus.Failed && x.CurrentlyRetries < x.MaximumRetries &&
+                 x.LastUpdate.HasValue && x.LastUpdate.Value.AddMinutes(5) < DateTime.UtcNow.AddHours(-3)) ||
                 (x.Status.Id == (int)JobStatus.FailedToSendToMq && x.CurrentlyRetries < x.MaximumRetries) ||
-                (x.Status.Id == (int)JobStatus.SentToMq &&
-                 x.LastExecution.GetValueOrDefault().AddMinutes(5) < DateTime.Now)
+                (x.Status.Id == (int)JobStatus.SentToMq && x.LastUpdate.HasValue &&
+                 x.LastUpdate.Value.AddMinutes(5) < DateTime.UtcNow.AddHours(-3))
             )).Where(x =>
                 _cronUtil.IsJobReadyToRun(x.SchedulingTypeId, x.CronExpression, x.IntervalInMinutes, x.LastExecution));
         }

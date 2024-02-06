@@ -34,9 +34,9 @@ public sealed class TaskerLogger<T> : ITaskerLogger<T>
 
     private void Log(LogLevel level, string message, Exception? exception = null)
     {
-        Console.WriteLine($"[Tasker] - [{level}] [{typeof(T).Name}]: {message}");
+        Console.WriteLine($"[Tasker] - [{level}] - [{typeof(T).Name}]: {message}");
 
         if (exception is not null)
-            Console.WriteLine($"Exception details: {exception}");
+            Console.WriteLine($"Exception message: {exception.Message}");
     }
 }

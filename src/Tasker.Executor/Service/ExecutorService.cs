@@ -33,6 +33,9 @@ public class ExecutorService : IExecutorService
     {
         try
         {
+            _logger.LogInformation($"Initializing job {jobName} execution...");
+            await UpdateJobStatus(jobName, (int)JobStatus.InProgress, true, true);
+
             var job = _jobs.FirstOrDefault(j => j.JobName == jobName);
 
             if (job == null)
@@ -40,8 +43,6 @@ public class ExecutorService : IExecutorService
                 _logger.LogError($"Job not found: {jobName}");
                 throw new Exception($"Job not found: {jobName}");
             }
-
-            await UpdateJobStatus(jobName, (int)JobStatus.InProgress, true, true);
 
             _logger.LogInformation($"Executing job: {jobName}");
 
@@ -67,7 +68,7 @@ public class ExecutorService : IExecutorService
                 e.Message
             );
 
-            _logger.LogCritical($"Error while executing job: {jobName}", e);
+            _logger.LogCritical($"Error while executing job: {jobName}");
         }
     }
 
@@ -81,6 +82,7 @@ public class ExecutorService : IExecutorService
     {
         try
         {
+            _logger.LogInformation($"Inserting job {jobName} history...");
             var job = (await _jobRepository.GetWhere(x => x.Name == jobName)).FirstOrDefault();
 
             if (job == null)
@@ -91,7 +93,6 @@ public class ExecutorService : IExecutorService
 
             await _jobHistoryRepository.Add(new JobHistory
             {
-                Id = default,
                 Message = message,
                 JobId = job.Id,
                 JobStatus = jobHistoryStatusId,
@@ -110,6 +111,8 @@ public class ExecutorService : IExecutorService
     {
         try
         {
+            _logger.LogInformation($"Updating job {jobName} status to {(JobStatus)statusId}...");
+
             var job = (await _jobRepository.GetWhere(j => j.Name == jobName)).FirstOrDefault();
 
             if (job == null)
@@ -121,7 +124,8 @@ public class ExecutorService : IExecutorService
             job.StatusId = statusId;
             job.InProgress = inProgress;
             job.LastExecution = DateTime.Now;
-            job.CurrentlyRetries = !success ? job.CurrentlyRetries + 1 : 0;
+
+            if (!inProgress) job.CurrentlyRetries = !success ? job.CurrentlyRetries + 1 : 0;
 
             await _jobRepository.Update(job);
         }

@@ -15,5 +15,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Tasker.Repository\Tasker.Repository.csproj" />
+      <ProjectReference Include="..\Tasker.Util\Tasker.Util.csproj" />
     </ItemGroup>
 </Project>
