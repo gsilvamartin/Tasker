@@ -11,8 +11,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.LoadEnvConfiguration();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(corsPolicyBuilder =>
+    {
+        corsPolicyBuilder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin();
+    });
+});
+
+builder.Services.LoadEnvConfiguration();
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
@@ -36,6 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
