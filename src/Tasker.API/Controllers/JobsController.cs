@@ -37,4 +37,33 @@ public class JobsController : BaseController
 
         return Success(result);
     }
+
+    [HttpGet]
+    [Route("isJobNameUnique/{jobName}")]
+    public async Task<IActionResult> IsJobNameUnique(string jobName)
+    {
+        var job = await _jobRepository.GetWhere(x => x.Name == jobName);
+
+        return Success(!job.Any());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] JobDto jobDto)
+    {
+        await _jobRepository.Add(new Job
+        {
+            Name = jobDto.Name,
+            MaximumRetries = jobDto.MaximumRetries,
+            CurrentlyRetries = 0,
+            StatusId = 2,
+            SchedulingTypeId = 1,
+            InProgress = false,
+            CreationDate = DateTime.Now,
+            LastUpdate = DateTime.Now,
+            CronExpression = jobDto.CronExpression,
+            IntervalInMinutes = jobDto.IntervalInMinutes,
+        });
+
+        return Success();
+    }
 }

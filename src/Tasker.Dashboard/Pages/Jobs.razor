@@ -1,28 +1,56 @@
 @page "/Jobs"
-@using System.ComponentModel
-@using AntDesign.TableModels
+@using Tasker.Dashboard.Model.Job
 @inject HttpClient HttpClient
+
+<Modal Title="@("Create new Job")"
+       Visible="@_createJobModalVisible"
+       OnOk="@HandleOkCreateJob"
+       OnCancel="@HandleCancelCreateJob"
+       ConfirmLoading="@_createJobModalLoadingBtn">
+
+    <Form Model="@_createJobRequest"
+          LabelColSpan="8"
+          WrapperColSpan="16"
+          OnFinish="OnFinishCreateJob"
+          OnFinishFailed="OnFinishCreateJobFailed"
+          @ref="@_createJobForm">
+
+        <FormItem Label="Job Name">
+            <Input @bind-Value="@context.Name" OnBlur="@CheckJobNameUnique"/>
+            @if (!_isJobNameUnique)
+            {
+                <Alert Message="Job name is already in use. Please choose a unique name." Type="error"/>
+            }
+        </FormItem>
+
+        <FormItem Label="Cron Expression">
+            <Input @bind-Value="@context.CronExpression"/>
+        </FormItem>
+
+
+        <FormItem Label="Maximum Retries">
+            <Input @bind-Value="@context.MaximumRetries"/>
+        </FormItem>
+
+
+        <FormItem Label="Interval in Minutes">
+            <Input @bind-Value="@context.IntervalInMinutes"/>
+        </FormItem>
+    </Form>
+</Modal>
+
 
 <PageContainer Title="Jobs">
     <Card>
-        <Alert
-            Message="To create a job, you must use a unique job name and a valid cron expression."
-            Type="success"
-            ShowIcon="true"
-            Banner
-            Style="margin: -12px; margin-bottom: 24px"/>
+        <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="@ShowCreateJobModal" Style="margin-bottom: 20px">Create new Job</Button>
 
-        <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Search">Create new Job</Button>
-
-        <Table TItem="JobData" DataSource="@jobData" OnRowClick="OnRowClick">
+        <Table TItem="JobData" DataSource="@_jobData">
             <PropertyColumn Property="j => j.Id">
                 <a>@context.Id</a>
             </PropertyColumn>
             <PropertyColumn Property="j => j.Name">
                 <a>@context.Name</a>
             </PropertyColumn>
-            <PropertyColumn Property="j => j.MaximumRetries"></PropertyColumn>
-            <PropertyColumn Property="j => j.CurrentlyRetries"></PropertyColumn>
             <PropertyColumn Property="j => j.StatusId">
                 @switch (context.StatusId)
                 {
@@ -52,6 +80,8 @@
             <PropertyColumn Property="j => j.CreationDate"></PropertyColumn>
             <PropertyColumn Property="j => j.LastUpdate"></PropertyColumn>
             <PropertyColumn Property="j => j.LastExecution"></PropertyColumn>
+            <PropertyColumn Property="j => j.MaximumRetries"></PropertyColumn>
+            <PropertyColumn Property="j => j.CurrentlyRetries"></PropertyColumn>
             <PropertyColumn Property="j => j.ExecutedBy"></PropertyColumn>
             <PropertyColumn Property="j => j.CronExpression"></PropertyColumn>
             <PropertyColumn Property="j => j.IntervalInMinutes"></PropertyColumn>
@@ -66,51 +96,5 @@
                 </Space>
             </ActionColumn>
         </Table>
-
-        @code {
-            private List<JobData> jobData = new List<JobData>();
-
-            protected override async Task OnInitializedAsync()
-            {
-                try
-                {
-                    var response = await HttpClient.GetStreamAsync("http://localhost:5040/api/Jobs");
-                    jobData = (await System.Text.Json.JsonSerializer.DeserializeAsync<ApiResponse>(response,
-                        new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true })).Data;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Failed to retrieve job data from the API. Error: {ex.Message}");
-                }
-            }
-
-            public class ApiResponse
-            {
-                public bool Success { get; set; }
-                public List<JobData> Data { get; set; }
-            }
-
-            public class JobData
-            {
-                [DisplayName("Id")] public int Id { get; set; }
-                [DisplayName("Name")] public string Name { get; set; }
-                [DisplayName("Maximum Retries")] public int MaximumRetries { get; set; }
-                [DisplayName("Currently Retries")] public int CurrentlyRetries { get; set; }
-                [DisplayName("Status")] public int StatusId { get; set; }
-                [DisplayName("Creation Date")] public DateTime CreationDate { get; set; }
-                [DisplayName("Last Update")] public DateTime LastUpdate { get; set; }
-                [DisplayName("Last Execution")] public DateTime LastExecution { get; set; }
-                [DisplayName("Executed By")] public string ExecutedBy { get; set; }
-                [DisplayName("Cron Expression")] public string CronExpression { get; set; }
-                [DisplayName("Interval In Minutes")] public int IntervalInMinutes { get; set; }
-            }
-
-            void OnRowClick(RowData<JobData> row)
-            {
-                Console.WriteLine($"Job with ID {row.Data.Id} was clicked.");
-            }
-
-        }
-
     </Card>
 </PageContainer>
