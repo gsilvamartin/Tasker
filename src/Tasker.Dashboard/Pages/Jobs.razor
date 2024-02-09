@@ -41,17 +41,17 @@
 
 
 <PageContainer Title="Jobs">
-    <Card>
-        <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="@ShowCreateJobModal" Style="margin-bottom: 20px">Create new Job</Button>
+    <Button Type="@ButtonType.Primary" Icon="@IconType.Outline.Plus" OnClick="@ShowCreateJobModal" Style="margin-bottom: 20px">Create new Job</Button>
 
+    <Card>
         <Table TItem="JobData" DataSource="@_jobData">
-            <PropertyColumn Property="j => j.Id">
+            <PropertyColumn Property="j => j.Id" Sortable="true" Filterable="true">
                 <a>@context.Id</a>
             </PropertyColumn>
-            <PropertyColumn Property="j => j.Name">
+            <PropertyColumn Property="j => j.Name" Sortable="true" Filterable="true">
                 <a>@context.Name</a>
             </PropertyColumn>
-            <PropertyColumn Property="j => j.StatusId">
+            <PropertyColumn Property="j => j.StatusId" Sortable="true" Filterable="true">
                 @switch (context.StatusId)
                 {
                     case 1:
@@ -77,14 +77,14 @@
                         break;
                 }
             </PropertyColumn>
-            <PropertyColumn Property="j => j.CreationDate"></PropertyColumn>
-            <PropertyColumn Property="j => j.LastUpdate"></PropertyColumn>
-            <PropertyColumn Property="j => j.LastExecution"></PropertyColumn>
-            <PropertyColumn Property="j => j.MaximumRetries"></PropertyColumn>
-            <PropertyColumn Property="j => j.CurrentlyRetries"></PropertyColumn>
-            <PropertyColumn Property="j => j.ExecutedBy"></PropertyColumn>
-            <PropertyColumn Property="j => j.CronExpression"></PropertyColumn>
-            <PropertyColumn Property="j => j.IntervalInMinutes"></PropertyColumn>
+            <PropertyColumn Property="j => j.CreationDate" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.LastUpdate" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.LastExecution" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.MaximumRetries" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.CurrentlyRetries" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.ExecutedBy" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.CronExpression" Sortable="true" Filterable="true"></PropertyColumn>
+            <PropertyColumn Property="j => j.IntervalInMinutes" Sortable="true" Filterable="true"></PropertyColumn>
             <ActionColumn Title="Action">
                 <Space Size=@("middle")>
                     <SpaceItem>
