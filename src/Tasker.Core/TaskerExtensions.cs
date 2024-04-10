@@ -27,13 +27,13 @@ public static class TaskerExtensions
         InitializeEnvironmentVariables(ref services);
         InitializeDatabase(ref services, taskerConfig);
 
-        Task.Run(() => InitializeExecutorDependencies(ref services));
-        Task.Run(() => InitializeSchedulerDependencies(ref services));
+        Task.Run(() => InitializeExecutor(ref services));
+        Task.Run(() => InitializeScheduler(ref services));
 
         return services;
     }
 
-    private static void InitializeExecutorDependencies(ref IServiceCollection services)
+    private static void InitializeExecutor(ref IServiceCollection services)
     {
         services.AddSingleton<ITaskerLogger<ExecutorQueueService>, TaskerLogger<ExecutorQueueService>>();
         services.AddSingleton<ITaskerLogger<ExecutorService>, TaskerLogger<ExecutorService>>();
@@ -49,7 +49,7 @@ public static class TaskerExtensions
         services.AddHostedService<ExecutorWorker>();
     }
 
-    private static void InitializeSchedulerDependencies(ref IServiceCollection services)
+    private static void InitializeScheduler(ref IServiceCollection services)
     {
         services.AddSingleton<ITaskerLogger<SchedulerQueueService>, TaskerLogger<SchedulerQueueService>>();
         services.AddSingleton<ITaskerLogger<SchedulerService>, TaskerLogger<SchedulerService>>();
